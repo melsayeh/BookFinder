@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="190dp"
+    android:orientation="horizontal"
+    android:weightSum="10">
+    <ImageView
+        android:id="@+id/book_cover"
+        android:layout_width="128dp"
+        android:layout_height="182dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_weight="0"
+        android:background="@android:color/background_dark"
+        />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="10"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/book_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:hint="Book Title"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/authors"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="2dp"
+            android:hint="Authors"
+            />
+        <TextView
+        android:id="@+id/publisher_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="4dp"
+        android:hint="Publisher - 2018"
+        android:textStyle="italic"
+        />
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:hint="Description description description description description description description description description description description description description description description description description description description description description."
+            android:textSize="12sp"
+            />
+    </LinearLayout>
+</LinearLayout>
