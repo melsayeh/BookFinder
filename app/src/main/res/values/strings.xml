@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Books Finder</string>
+    <string name="book_title">Book Title</string>
+    <string name="authors">Authors</string>
+    <string name="publisher_date">Publisher - 2018</string>
+    <string name="dash"> - </string>
+    <string name="title_activity_show_results">ShowResultsActivity</string>
 </resources>
