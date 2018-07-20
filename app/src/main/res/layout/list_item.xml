@@ -11,6 +11,7 @@
         android:layout_marginBottom="4dp"
         android:layout_marginTop="4dp"
         android:layout_weight="0"
+        android:layout_marginStart="2dp"
         />
     <LinearLayout
         android:layout_width="wrap_content"
@@ -21,37 +22,52 @@
             android:id="@+id/book_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:hint="@string/book_title"
             android:textColor="@android:color/black"
-            android:textSize="20sp"
+            android:maxLines="2"
+            android:textAllCaps="true"
+            android:textSize="15sp"
             android:textStyle="bold"/>
         <TextView
             android:id="@+id/authors"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="2dp"
             android:hint="@string/authors"
+            android:textSize="13sp"
             />
         <TextView
         android:id="@+id/publisher_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"
         android:hint="@string/publisher_date"
         android:textStyle="italic"
+        android:textSize="13sp"
         />
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:hint="AED 50.00"
+            android:textSize="13sp"
+            android:textStyle="bold"/>
         <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginBottom="4dp"
             android:layout_marginTop="4dp"
+            android:layout_marginStart="4dp"
             android:hint="Description description description description description description description description description description description description description description description description description description description description description."
             android:textSize="12sp"
+            android:ellipsize="end"
+            android:maxLines="5"
             />
     </LinearLayout>
 </LinearLayout>

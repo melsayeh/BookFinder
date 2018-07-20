@@ -6,6 +6,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ import java.util.StringJoiner;
 public class BookAdapter<E extends Object> extends ArrayAdapter<BookInfo> {
     private Bitmap coverThumbnail;
 
-    public BookAdapter(@NonNull Context context, int resource, @NonNull List<BookInfo> objects) {
+    public BookAdapter(@NonNull Context context, @NonNull List<BookInfo> objects) {
         super(context, 0, objects);
     }
 
@@ -43,7 +44,6 @@ public class BookAdapter<E extends Object> extends ArrayAdapter<BookInfo> {
          */
 
         ImageView bookCover = listItemView.findViewById(R.id.book_cover);
-        bookCover.setImageBitmap(pointer.getBookCoverImage());
 
         TextView bookTitle =  listItemView.findViewById(R.id.book_title);
         bookTitle.setText(pointer.getBookTitle());
@@ -52,8 +52,22 @@ public class BookAdapter<E extends Object> extends ArrayAdapter<BookInfo> {
         authorsNames.setText(fetchAuthorsFromArray(pointer.getAuthors()));
 
         TextView publisherAndDate = listItemView.findViewById(R.id.publisher_date);
-        String collector = pointer.getPublisher()+R.string.dash+pointer.getPublishedDate();
+        String collector;
+        if(pointer.getPublisher().equals(" ")) {
+            collector = pointer.getPublishedDate();
+        }else{
+            collector = pointer.getPublisher()+" - "+pointer.getPublishedDate();
+        }
         publisherAndDate.setText(collector);
+
+        TextView price = listItemView.findViewById(R.id.price);
+        if(pointer.getCurrencyCode().equals(" "))
+        {
+            price.setText(pointer.getRetailPrice());
+        }else{
+            String retailPrice = pointer.getCurrencyCode()+" "+pointer.getRetailPrice();
+            price.setText(retailPrice);
+        }
 
         TextView bookDescription = listItemView.findViewById(R.id.description);
         bookDescription.setText(pointer.getBookDescription());
