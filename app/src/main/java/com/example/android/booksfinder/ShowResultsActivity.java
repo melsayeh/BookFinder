@@ -1,6 +1,7 @@
 package com.example.android.booksfinder;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,19 +18,20 @@ public class ShowResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_results);
 
-//        Intent intent = getIntent();
         ArrayList<BookInfo> queryUrl = MainActivity.getResults();
-        updateUi(queryUrl);
+        ArrayList<Bitmap> bookCovers = MainActivity.getCovers();
+        updateUi(queryUrl , bookCovers);
     }
-    public void updateUi(ArrayList<BookInfo> getBookInfo){
+    public void updateUi(ArrayList<BookInfo> getBookInfo, ArrayList<Bitmap> coverImages){
         // Fetches {@link ArrayList} earthquake.
         ArrayList<BookInfo> bookList = getBookInfo;
+        ArrayList<Bitmap> coverList = coverImages;
 
         // Find a reference to the {@link ListView} in the layout
         ListView booksListView = (ListView) findViewById(R.id.list);
 //        earthquakeListView.setEmptyView(emptyState);
 
-        // Create a new {@link ArrayAdapter} of earthquakes
+        // Create a new {@link ArrayAdapter} of bookInfo
         BookAdapter<BookInfo> adapter = new BookAdapter<BookInfo>(this, bookList);
 
         // Set the adapter on the {@link ListView}
@@ -37,6 +39,8 @@ public class ShowResultsActivity extends AppCompatActivity {
         if (booksListView != null) {
             booksListView.setAdapter(adapter);
         }
+
+        CoverImageAdapter coverImageAdapter = new CoverImageAdapter(this, coverImages);
     }
 
 }

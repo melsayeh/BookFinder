@@ -43,7 +43,7 @@ public class BookAdapter<E extends Object> extends ArrayAdapter<BookInfo> {
         Publisher, PublishedDate, and Description
          */
 
-        ImageView bookCover = listItemView.findViewById(R.id.book_cover);
+        //ImageView bookCover = listItemView.findViewById(R.id.book_cover);
 
         TextView bookTitle =  listItemView.findViewById(R.id.book_title);
         bookTitle.setText(pointer.getBookTitle());

@@ -34,8 +34,6 @@ public class BooksInfoLoader extends AsyncTaskLoader<ArrayList<BookInfo>> {
     public ArrayList<BookInfo> loadInBackground() {
         try {
             jsonResponse = makeHttpRequest(mUrl);
-            Log.v(LOG_TAG,"*******"+jsonResponse);
-            Log.v(LOG_TAG,"*********"+mUrl);
         } catch (IOException e) {
             e.printStackTrace();
         }

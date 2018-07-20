@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<BookInfo>> {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks {
 
     private static final String LOG_TAG = "MainActivity";
     static String INITIAL_QUERY = "https://www.googleapis.com/books/v1/volumes?q=";
@@ -31,11 +31,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     ImageButton searchButton;
     EditText userInput;
     static ArrayList<BookInfo> RESULTS;
+    static ArrayList<Bitmap> COVERS;
     ProgressBar progressBar;
 
-     public static ArrayList<BookInfo> getResults(){
+    public static ArrayList<BookInfo> getResults(){
         return RESULTS;
-     }
+    }
+
+    public static ArrayList<Bitmap> getCovers(){
+        return COVERS;
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,26 +111,52 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onPause() {
         super.onPause();
         getLoaderManager().destroyLoader(1);
+        getLoaderManager().destroyLoader(2);
     }
 
     @Override
-    public Loader<ArrayList<BookInfo>> onCreateLoader(int id, Bundle args) {
-        BooksInfoLoader booksInfoLoader = new BooksInfoLoader(this,getFinalQueryURL());
-        return booksInfoLoader;
+    public Loader onCreateLoader(int id, Bundle args){
+        int loaderId = id;
+        if (loaderId==1) {
+            BooksInfoLoader booksInfoLoader = new BooksInfoLoader(this, getFinalQueryURL());
+            return booksInfoLoader;
+        }
+
+        if (loaderId==2){
+            String imageLinks[]=new String[RESULTS.size()];
+            BookInfo line;
+            int i;
+            for (i=0; i<RESULTS.size(); i++){
+                line = RESULTS.get(i);
+                imageLinks[i] = line.getBookCoverImageUrl();
+            }
+            CoverImageLoader coverImageLoader = new CoverImageLoader(this, imageLinks);
+            return coverImageLoader;
+        }
+        return null;
     }
 
     @Override
-    public void onLoadFinished(Loader<ArrayList<BookInfo>> loader, ArrayList<BookInfo> data) {
-        Intent goToSearchResults = new Intent(MainActivity.this, ShowResultsActivity.class);
-        //goToSearchResults.putExtra("BookList", data);
-        startActivity(goToSearchResults);
-        searchButton.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.GONE);
-        RESULTS = data;
+    public void onLoadFinished(Loader loader, Object data) {
+        int loaderId = loader.getId();
+        if(loaderId==1) {
+            RESULTS = (ArrayList<BookInfo>) data;
+            LoaderManager loaderManager = getLoaderManager();
+            loaderManager.initLoader(2,null,MainActivity.this);
+        }
+
+        if(loaderId==2){
+            Intent goToSearchResults = new Intent(MainActivity.this, ShowResultsActivity.class);
+            //goToSearchResults.putExtra("BookList", data);
+            startActivity(goToSearchResults);
+            searchButton.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+            COVERS = (ArrayList<Bitmap>) data;
+        }
     }
 
     @Override
-    public void onLoaderReset(Loader<ArrayList<BookInfo>> loader) {
+    public void onLoaderReset(Loader loader) {
 
     }
 

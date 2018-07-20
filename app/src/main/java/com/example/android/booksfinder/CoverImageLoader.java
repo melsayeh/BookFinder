@@ -9,24 +9,32 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
-public class CoverImageLoader extends AsyncTaskLoader<Bitmap> {
-    public String mUrl;
-    public CoverImageLoader(Context context, String url) {
+public class CoverImageLoader extends AsyncTaskLoader<ArrayList<Bitmap>> {
+    ArrayList<Bitmap> images;
+    private String mUrl[];
+    public CoverImageLoader(Context context, String url[]) {
         super(context);
-        mUrl = url;
+        mUrl= new String[url.length];
+        mUrl = url.clone();
     }
 
     @Override
-    public Bitmap loadInBackground(){
+    public ArrayList<Bitmap> loadInBackground(){
         Bitmap coverImage = null;
-        try {
-            URL imageLink = new URL(mUrl);
-            coverImage = getImagefromUrl(imageLink);
-        } catch (IOException e) {
-            e.printStackTrace();
+        ArrayList<Bitmap> images = new ArrayList<>(mUrl.length);
+        int i;
+        for (i=0; i<mUrl.length;i++) {
+            try {
+                URL imageLink = new URL(mUrl[i]);
+                coverImage = getImagefromUrl(imageLink);
+                images.add(coverImage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        return coverImage;
+        return images;
     }
 
     @Override
