@@ -8,8 +8,6 @@
         android:id="@+id/book_cover"
         android:layout_width="128dp"
         android:layout_height="182dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginTop="4dp"
         android:layout_weight="0"
         android:layout_marginStart="2dp"
         />
@@ -20,12 +18,14 @@
         android:orientation="vertical">
         <TextView
             android:id="@+id/book_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:hint="@string/book_title"
-            android:textColor="@android:color/black"
+            android:paddingStart="2dp"
+            android:textColor="@android:color/white"
             android:maxLines="2"
             android:textAllCaps="true"
             android:textSize="15sp"

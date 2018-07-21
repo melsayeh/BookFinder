@@ -147,7 +147,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         if(loaderId==2){
             Intent goToSearchResults = new Intent(MainActivity.this, ShowResultsActivity.class);
-            //goToSearchResults.putExtra("BookList", data);
             startActivity(goToSearchResults);
             searchButton.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);

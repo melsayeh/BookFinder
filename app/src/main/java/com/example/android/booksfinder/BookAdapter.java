@@ -71,6 +71,9 @@ public class BookAdapter<E extends Object> extends ArrayAdapter<BookInfo> {
 
         TextView bookDescription = listItemView.findViewById(R.id.description);
         bookDescription.setText(pointer.getBookDescription());
+
+        ImageView bookCoverImage = listItemView.findViewById(R.id.book_cover);
+        bookCoverImage.setImageBitmap(pointer.getCoverImage());
         return listItemView;
     }
 

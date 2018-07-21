@@ -12,8 +12,9 @@ public class BookInfo extends Object {
     private String previewLinkUrl;
     private String retailPrice;
     private String currencyCode;
+    private Bitmap coverImage;
 
-    public BookInfo(String bookTitle, String[] authors, String publisher, String bookCoverImageUrl, String publishedDate, String bookDescription, String previewLinkUrl, String retailPrice, String currencyCode) {
+    public BookInfo(String bookTitle, String[] authors, String publisher, String bookCoverImageUrl, String publishedDate, String bookDescription, String previewLinkUrl, String retailPrice, String currencyCode, Bitmap coverImage) {
         this.bookTitle = bookTitle;
         this.authors = authors;
         this.publisher = publisher;
@@ -23,6 +24,7 @@ public class BookInfo extends Object {
         this.previewLinkUrl = previewLinkUrl;
         this.retailPrice = retailPrice;
         this.currencyCode = currencyCode;
+        this.coverImage = coverImage;
     }
 
     public String getBookTitle() {
@@ -95,5 +97,13 @@ public class BookInfo extends Object {
 
     public void setCurrencyCode(String currencyCode) {
         this.currencyCode = currencyCode;
+    }
+
+    public Bitmap getCoverImage() {
+        return coverImage;
+    }
+
+    public void setCoverImage(Bitmap coverImage) {
+        this.coverImage = coverImage;
     }
 }

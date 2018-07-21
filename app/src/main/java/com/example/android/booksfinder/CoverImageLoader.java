@@ -23,12 +23,18 @@ public class CoverImageLoader extends AsyncTaskLoader<ArrayList<Bitmap>> {
     @Override
     public ArrayList<Bitmap> loadInBackground(){
         Bitmap coverImage = null;
-        ArrayList<Bitmap> images = new ArrayList<>(mUrl.length);
+        ArrayList<Bitmap> images = new ArrayList<>();
+        URL imageLink;
         int i;
         for (i=0; i<mUrl.length;i++) {
             try {
-                URL imageLink = new URL(mUrl[i]);
-                coverImage = getImagefromUrl(imageLink);
+
+                if (mUrl[i] == null || mUrl[i].equals(" ")) {
+                    coverImage = BitmapFactory.decodeResource(getContext().getResources(),R.drawable.no_image);
+                }else{
+                    imageLink = new URL(mUrl[i]);
+                    coverImage = getImagefromUrl(imageLink);
+            }
                 images.add(coverImage);
             } catch (IOException e) {
                 e.printStackTrace();

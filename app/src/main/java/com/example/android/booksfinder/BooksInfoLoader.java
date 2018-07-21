@@ -2,6 +2,7 @@ package com.example.android.booksfinder;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -23,8 +24,7 @@ public class BooksInfoLoader extends AsyncTaskLoader<ArrayList<BookInfo>> {
 
     private String mUrl;
     private String jsonResponse="";
-    private ArrayList<BookInfo> bookList = null;
-
+    private ArrayList<BookInfo> bookList = new ArrayList<>();
     public BooksInfoLoader(Context context, String url) {
         super(context);
         mUrl = url;
@@ -132,7 +132,7 @@ public class BooksInfoLoader extends AsyncTaskLoader<ArrayList<BookInfo>> {
                 String bookDescription = " ";
                 if(volumeInfo.has("description"))
                     bookDescription = volumeInfo.getString("description");
-                String bookCoverImageUrl=null;
+                String bookCoverImageUrl=" ";
                 if(volumeInfo.has("imageLinks")){
                     JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
                     bookCoverImageUrl = imageLinks.getString("thumbnail");
@@ -147,7 +147,8 @@ public class BooksInfoLoader extends AsyncTaskLoader<ArrayList<BookInfo>> {
                     retailPrice = price.getString("amount");
                     currencyCode = price.getString("currencyCode");
                 }
-                BookInfo bookInfo = new BookInfo(bookTitle,authors,publisher,bookCoverImageUrl,publishedDate,bookDescription,previewLinkUrl,retailPrice,currencyCode);
+                Bitmap bookCover = null;
+                BookInfo bookInfo = new BookInfo(bookTitle,authors,publisher,bookCoverImageUrl,publishedDate,bookDescription,previewLinkUrl,retailPrice,currencyCode,bookCover);
                 bookInfos.add(bookInfo);
             }
 
