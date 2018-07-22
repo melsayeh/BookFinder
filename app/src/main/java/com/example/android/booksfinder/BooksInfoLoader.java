@@ -116,12 +116,18 @@ public class BooksInfoLoader extends AsyncTaskLoader<ArrayList<BookInfo>> {
                 JSONObject arrayElement = itemsArray.getJSONObject(i);
                 JSONObject volumeInfo = arrayElement.getJSONObject("volumeInfo");
                 String bookTitle = volumeInfo.getString("title");
-//                JSONArray authorNames =volumeInfo.getJSONArray("authors");
-                String authors[]={"*****"};
-//                for (int x=0; x<authorNames.length() ; x++){
-//                    String authorName = authorNames.getString(x);
-//                    authors[x] = authorName;
-//                }
+                ArrayList<String> authors = new ArrayList<>();
+                if(volumeInfo.has("authors")){
+                    JSONArray authorNames =volumeInfo.getJSONArray("authors");
+                    if(authorNames.length()>0){
+                        int x;
+                        for(x=0; x<authorNames.length(); x++){
+                            authors.add(authorNames.getString(x));
+                        }
+                    }
+                }
+
+
                 String publisher = " ";
                 if(volumeInfo.has("publisher")){
                     publisher = volumeInfo.getString("publisher");

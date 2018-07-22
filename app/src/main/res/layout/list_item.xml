@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="190dp"
     android:orientation="horizontal"
+    android:id="@+id/parent_item"
     android:weightSum="10">
     <ImageView
         android:id="@+id/book_cover"
@@ -10,6 +11,7 @@
         android:layout_height="182dp"
         android:layout_weight="0"
         android:layout_marginStart="2dp"
+        android:background="@android:color/black"
         />
     <LinearLayout
         android:layout_width="wrap_content"
@@ -20,9 +22,8 @@
             android:id="@+id/book_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
+            android:background="@android:color/black"
+            android:paddingTop="2dp"
             android:hint="@string/book_title"
             android:paddingStart="2dp"
             android:textColor="@android:color/white"

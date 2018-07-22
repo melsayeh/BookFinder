@@ -1,7 +1,9 @@
 package com.example.android.booksfinder;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,11 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -42,8 +47,7 @@ public class BookAdapter<E extends Object> extends ArrayAdapter<BookInfo> {
         /*Declare and assign values to ImageView and TextViews BookTitle, Authors,
         Publisher, PublishedDate, and Description
          */
-
-        //ImageView bookCover = listItemView.findViewById(R.id.book_cover);
+        Log.d("Pointer Value","---------->"+position);
 
         TextView bookTitle =  listItemView.findViewById(R.id.book_title);
         bookTitle.setText(pointer.getBookTitle());
@@ -74,19 +78,33 @@ public class BookAdapter<E extends Object> extends ArrayAdapter<BookInfo> {
 
         ImageView bookCoverImage = listItemView.findViewById(R.id.book_cover);
         bookCoverImage.setImageBitmap(pointer.getCoverImage());
+
+        LinearLayout itemLayout = listItemView.findViewById(R.id.parent_item);
+        itemLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri previewLink = Uri.parse(pointer.getPreviewLinkUrl());
+                Intent openPreviewLink = new Intent(Intent.ACTION_VIEW, previewLink);
+                getContext().startActivity(openPreviewLink);
+            }
+        });
         return listItemView;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public String fetchAuthorsFromArray(String[] authors){
+    public String fetchAuthorsFromArray(ArrayList<String> authors){
+        Log.v("Authors", Arrays.toString(authors.toArray()));
         int i;
         StringJoiner groupedAuthors = new StringJoiner(" & ");
-        for(i=0 ; i<authors.length ; i++ ){
-            if(authors.length==1) {
-                return authors[0];
+        for(i=0 ; i<authors.size() ; i++ ){
+            if(authors.size()==1) {
+                return authors.get(0);
             }
             else{
-                groupedAuthors.add(authors[i]);
+//                if(authors[i]!=null) {
+                    groupedAuthors.add(authors.get(i));
+//                }
+
             }
         }
         return groupedAuthors.toString();

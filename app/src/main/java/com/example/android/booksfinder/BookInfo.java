@@ -2,9 +2,11 @@ package com.example.android.booksfinder;
 
 import android.graphics.Bitmap;
 
+import java.util.ArrayList;
+
 public class BookInfo extends Object {
     private String bookTitle;
-    private String authors[];
+    private ArrayList<String> authors;
     private String publisher;
     private String bookCoverImageUrl;
     private String publishedDate;
@@ -14,7 +16,7 @@ public class BookInfo extends Object {
     private String currencyCode;
     private Bitmap coverImage;
 
-    public BookInfo(String bookTitle, String[] authors, String publisher, String bookCoverImageUrl, String publishedDate, String bookDescription, String previewLinkUrl, String retailPrice, String currencyCode, Bitmap coverImage) {
+    public BookInfo(String bookTitle, ArrayList<String> authors, String publisher, String bookCoverImageUrl, String publishedDate, String bookDescription, String previewLinkUrl, String retailPrice, String currencyCode, Bitmap coverImage) {
         this.bookTitle = bookTitle;
         this.authors = authors;
         this.publisher = publisher;
@@ -35,11 +37,11 @@ public class BookInfo extends Object {
         this.bookTitle = bookTitle;
     }
 
-    public String[] getAuthors() {
+    public ArrayList<String> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(String[] authors) {
+    public void setAuthors(ArrayList<String> authors) {
         this.authors = authors;
     }
 

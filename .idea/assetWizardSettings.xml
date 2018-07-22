@@ -35,6 +35,7 @@
                                     <map>
                                       <entry key="imageAsset" value="C:\Users\Mansour\Downloads\twotone-search-android-black\res\drawable-xxhdpi\twotone_search_black_18.png" />
                                       <entry key="outputName" value="search_button" />
+                                      <entry key="theme" value="HOLO_DARK" />
                                       <entry key="themeColor" value="e51b5a" />
                                     </map>
                                   </option>

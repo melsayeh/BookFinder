@@ -5,4 +5,5 @@
     <string name="publisher_date">Publisher - 2018</string>
     <string name="dash"> - </string>
     <string name="title_activity_show_results">ShowResultsActivity</string>
+    <string name="no_connection">No connection!</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.android.booksfinder;
 
+import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
@@ -8,6 +9,8 @@ import android.content.Loader;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Layout;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -16,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -66,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 return false;
             }
         });
-
         radioGroup = findViewById(R.id.radio_group);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -98,11 +101,28 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoaderManager loaderManager = getLoaderManager();
-                loaderManager.initLoader(1,null,MainActivity.this);
-                progressBar = findViewById(R.id.progress_bar);
-                searchButton.setVisibility(View.GONE);
-                progressBar.setVisibility(View.VISIBLE);
+                if(userInput.getText().toString().isEmpty()){
+                    AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                    alert.setTitle("What?");
+                    alert.setMessage("Nothing to search for!");
+                    alert.setPositiveButton("OK",null);
+                    alert.show();
+                }else {
+                    LoaderManager loaderManager = getLoaderManager();
+                    loaderManager.initLoader(1, null, MainActivity.this);
+                    progressBar = findViewById(R.id.progress_bar);
+                    searchButton.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        final RelativeLayout layout = this.findViewById(R.id.parent_layout);
+        layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                im.hideSoftInputFromWindow(layout.getWindowToken(),0);
             }
         });
     }
@@ -162,10 +182,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public String getFinalQueryURL() {
         StringBuilder finalQueryUrl = new StringBuilder();
         finalQueryUrl.append(INITIAL_QUERY);
-        finalQueryUrl.append(userInput.getText().toString().replace(" ", "+"));
-        finalQueryUrl.append("+");
         finalQueryUrl.append(searchCriteria);
+        finalQueryUrl.append(":");
+        finalQueryUrl.append(userInput.getText().toString().replace(" ", "+"));
         finalQueryUrl.append("&maxResults=10");
+        Log.v(LOG_TAG, "QueryLink"+finalQueryUrl);
         return finalQueryUrl.toString();
     }
 
