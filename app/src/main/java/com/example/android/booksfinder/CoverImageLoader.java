@@ -26,14 +26,15 @@ public class CoverImageLoader extends AsyncTaskLoader<ArrayList<Bitmap>> {
         ArrayList<Bitmap> images = new ArrayList<>();
         URL imageLink;
         int i;
+        //Load Images from the corresponding imageLinks taken from bookInfo Objects
         for (i=0; i<mUrl.length;i++) {
             try {
 
-                if (mUrl[i] == null || mUrl[i].equals(" ")) {
+                if (mUrl[i] == null || mUrl[i].equals("")) {
                     coverImage = BitmapFactory.decodeResource(getContext().getResources(),R.drawable.no_image);
                 }else{
                     imageLink = new URL(mUrl[i]);
-                    coverImage = getImagefromUrl(imageLink);
+                    coverImage = getImageFromUrl(imageLink);
             }
                 images.add(coverImage);
             } catch (IOException e) {
@@ -48,7 +49,9 @@ public class CoverImageLoader extends AsyncTaskLoader<ArrayList<Bitmap>> {
         forceLoad();
     }
 
-    private Bitmap getImagefromUrl(URL url) throws IOException{
+    //@Params url: the image link that holds the cover image
+    //@Returns fetched image from the url
+    private Bitmap getImageFromUrl(URL url) throws IOException{
         HttpURLConnection connection = null;
         InputStream inputStream = null;
         Bitmap bookCoverImage = null;

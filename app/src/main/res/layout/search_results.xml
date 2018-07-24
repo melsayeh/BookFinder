@@ -27,7 +27,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:paddingTop="16dp"
-            android:text="Nothig Found!"
+            android:text="Nothing Found!"
             android:textSize="20sp"/>
 
     </LinearLayout>

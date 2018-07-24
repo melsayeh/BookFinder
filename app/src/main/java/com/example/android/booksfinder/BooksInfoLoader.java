@@ -25,6 +25,8 @@ public class BooksInfoLoader extends AsyncTaskLoader<ArrayList<BookInfo>> {
     private String mUrl;
     private String jsonResponse="";
     private ArrayList<BookInfo> bookList = new ArrayList<>();
+
+    //Default Constructor
     public BooksInfoLoader(Context context, String url) {
         super(context);
         mUrl = url;
@@ -33,20 +35,25 @@ public class BooksInfoLoader extends AsyncTaskLoader<ArrayList<BookInfo>> {
     @Override
     public ArrayList<BookInfo> loadInBackground() {
         try {
+            //fetch JSON from the URL
             jsonResponse = makeHttpRequest(mUrl);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        //Extract and store information from the JSON string in a list of bookInfo objects
         bookList = extractBookInfo(jsonResponse);
         return bookList;
     }
 
     @Override
     public void onStartLoading(){
+        //force the loader to start
         forceLoad();
     }
 
+    //@param: jsonQuery: website that holds the json string
+    //@return: JSON string fetched from the website
     private String makeHttpRequest(String jsonQuery) throws IOException{
         URL queryUrl = null;
         try {
@@ -67,7 +74,7 @@ public class BooksInfoLoader extends AsyncTaskLoader<ArrayList<BookInfo>> {
             httpURLConnection.setReadTimeout(15000 /*milliseconds*/);
             httpURLConnection.connect();
 
-            inputStream = httpURLConnection.getInputStream();
+            inputStream = httpURLConnection.getInputStream(); //get the stream from the connection
             jsonResponse = readInputStream(inputStream);
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
@@ -82,6 +89,8 @@ public class BooksInfoLoader extends AsyncTaskLoader<ArrayList<BookInfo>> {
         return jsonResponse;
     }
 
+    //@Param: inputStream obtained from the HTTP connection
+    //@Return: raw JSON
     private String readInputStream(InputStream inputStream) throws IOException{
         StringBuilder stringBuilder = new StringBuilder();
         if(inputStream !=null){
@@ -96,6 +105,9 @@ public class BooksInfoLoader extends AsyncTaskLoader<ArrayList<BookInfo>> {
         return stringBuilder.toString();
     }
 
+    //@Param: jResponse: raw JSON string obtained from the website
+    //@Return: ArrayList of BookInfo objects
+    //Parse required data from raw JSON
     private ArrayList<BookInfo> extractBookInfo(String jResponse) {
 
         // Create an empty ArrayList that we can start adding book info to
@@ -146,12 +158,15 @@ public class BooksInfoLoader extends AsyncTaskLoader<ArrayList<BookInfo>> {
 
                 String previewLinkUrl = volumeInfo.getString("previewLink");
                 JSONObject saleInfo = arrayElement.getJSONObject("saleInfo");
-                String retailPrice="Free";
+                String retailPrice="";
                 String currencyCode = " ";
                 if(saleInfo.has("retailPrice")) {
                     JSONObject price = saleInfo.getJSONObject("retailPrice");
                     retailPrice = price.getString("amount");
                     currencyCode = price.getString("currencyCode");
+                }else if(saleInfo.has("saleability")){
+                    retailPrice = saleInfo.getString("saleability");
+                    retailPrice = retailPrice.replace("_"," ");
                 }
                 Bitmap bookCover = null;
                 BookInfo bookInfo = new BookInfo(bookTitle,authors,publisher,bookCoverImageUrl,publishedDate,bookDescription,previewLinkUrl,retailPrice,currencyCode,bookCover);
@@ -166,7 +181,7 @@ public class BooksInfoLoader extends AsyncTaskLoader<ArrayList<BookInfo>> {
             Log.e("Books Main Activity", "Problem parsing the BookInfo JSON results", e);
         }
 
-        // Return the list of earthquakes
+        // Return the list of bookInfo
         return bookInfos;
     }
 }

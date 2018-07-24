@@ -11,21 +11,23 @@
         android:layout_height="182dp"
         android:layout_weight="0"
         android:layout_marginStart="2dp"
-        android:background="@android:color/black"
+        android:background="@android:color/background_dark"
         />
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="10"
+        android:weightSum="100"
         android:orientation="vertical">
         <TextView
             android:id="@+id/book_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/black"
+            android:layout_height="0dp"
+            android:layout_weight="25"
+            android:background="@android:color/background_dark"
             android:paddingTop="2dp"
             android:hint="@string/book_title"
             android:paddingStart="2dp"
+            android:gravity="center_vertical"
             android:textColor="@android:color/white"
             android:maxLines="2"
             android:textAllCaps="true"
@@ -34,7 +36,8 @@
         <TextView
             android:id="@+id/authors"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="10"
             android:layout_marginStart="4dp"
             android:layout_marginTop="2dp"
             android:hint="@string/authors"
@@ -43,7 +46,8 @@
         <TextView
         android:id="@+id/publisher_date"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+            android:layout_weight="10"
         android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"
         android:hint="@string/publisher_date"
@@ -53,15 +57,18 @@
         <TextView
             android:id="@+id/price"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="10"
             android:layout_marginStart="4dp"
             android:hint="AED 50.00"
+            android:textColor="@android:color/holo_red_light"
             android:textSize="13sp"
             android:textStyle="bold"/>
         <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="45"
             android:layout_marginBottom="4dp"
             android:layout_marginTop="4dp"
             android:layout_marginStart="4dp"

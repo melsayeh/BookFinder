@@ -28,20 +28,29 @@ public class ShowResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_results);
 
+        //Set empty view to the ListView to show when empty
         emptyView = findViewById(R.id.empty_state);
         emptyStateText = findViewById(R.id.empty_state_text);
+
+        //If no network show "No Connection"
         if (!isNetworkConnected()){
             emptyStateText.setText(R.string.no_connection);
             emptyView.setVisibility(View.VISIBLE);
         }
+        //Get RESULT and COVER variables from the MainActivity
         ArrayList<BookInfo> queryUrl = MainActivity.getResults();
         ArrayList<Bitmap> bookCovers = MainActivity.getCovers();
 
+        //Show the empty view if no results found
         if(queryUrl==null){
             emptyView.setVisibility(View.VISIBLE);
-        }else
+        }else //otherwise, show the results in the screen
         updateUi(queryUrl , bookCovers);
     }
+
+    /* @Params: getBookInfo: results of the parsed JSON Query
+       @Params: coverImages: results of the parsed cover Images
+     */
     public void updateUi(ArrayList<BookInfo> getBookInfo, ArrayList<Bitmap> coverImages){
         // Fetches {@link ArrayList} earthquake.
         ArrayList<BookInfo> bookList = getBookInfo;
@@ -49,6 +58,7 @@ public class ShowResultsActivity extends AppCompatActivity {
         BookInfo finalBookInfo;
         Bitmap itemCoverImage;
         int i;
+        //Merge book information with corresponding cover images in one List
         for(i=0; i<bookList.size(); i++){
             itemCoverImage = coverImages.get(i);
             finalBookInfo = bookList.get(i);
@@ -64,6 +74,7 @@ public class ShowResultsActivity extends AppCompatActivity {
         BookAdapter<BookInfo> adapter = new BookAdapter<BookInfo>(this, newList);
 
 
+
         // Set the adapter on the {@link ListView}
         // so the list can be populated in the user interface
         if (booksListView != null) {
@@ -73,6 +84,8 @@ public class ShowResultsActivity extends AppCompatActivity {
 
     }
 
+    //Test internet connectivity
+    //@return connected or not
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 

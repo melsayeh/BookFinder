@@ -9,20 +9,25 @@ import android.content.Loader;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.Layout;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.view.inputmethod.InputMethodSubtype;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -53,9 +58,63 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //EditText that contains user input
         userInput = findViewById(R.id.edit_text);
 
-        //Trigger the search button when user clicks "Enter" instead of Search button
+        //Button shows up to clear the EditText all at once
+        final Button clearText = findViewById(R.id.clear_text);
+
+        //Set circled X as text of the button
+        clearText.setText(String.valueOf("\u24E7"));
+
+        //Show clearText button when user start typing, if the editText is empty, hide it
+        userInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                if (!userInput.getText().toString().isEmpty()){
+                    clearText.setVisibility(View.VISIBLE);
+                    clearText.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            userInput.setText("");
+                        }
+                    });
+
+                }else clearText.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!userInput.getText().toString().isEmpty()){
+                    clearText.setVisibility(View.VISIBLE);
+                    clearText.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            userInput.setText("");
+                        }
+                    });
+
+                }else clearText.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!userInput.getText().toString().isEmpty()){
+                    clearText.setVisibility(View.VISIBLE);
+                    clearText.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            userInput.setText("");
+                        }
+                    });
+
+                }else clearText.setVisibility(View.GONE);
+            }
+        });
+
+
+
+        //Trigger the search button when user hits "Enter" key instead of Search button
         userInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -70,6 +129,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 return false;
             }
         });
+
+        //Radio group that contains radio buttons for search criteria
         radioGroup = findViewById(R.id.radio_group);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -77,19 +138,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
                 switch (checkedId) {
                     case R.id.is_title:
-                        searchCriteria = "intitle";
+                        searchCriteria = "intitle"; //add inTitle to the search query
                         break;
 
                     case R.id.is_author:
-                        searchCriteria = "inauthor";
+                        searchCriteria = "inauthor"; //add inauthor to the search criteria
                         break;
 
                     case R.id.is_publisher:
-                        searchCriteria = "inpublisher";
+                        searchCriteria = "inpublisher"; //add inpublisher to the search criteria
                         break;
 
                     case R.id.is_subject:
-                        searchCriteria = "subject";
+                        searchCriteria = "subject"; //add subject to the search criteria
                         break;
 
                 }
@@ -97,26 +158,32 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         });
 
         searchButton = findViewById(R.id.search_button);
+
         //Go to Search Results Activity when submitting user input
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(userInput.getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+                //If user left the search field empty show alert dialogue box
                 if(userInput.getText().toString().isEmpty()){
                     AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
-                    alert.setTitle("What?");
-                    alert.setMessage("Nothing to search for!");
+                    alert.setTitle("What?"); //Error title
+                    alert.setMessage("Nothing to search for!"); //Error message
                     alert.setPositiveButton("OK",null);
                     alert.show();
                 }else {
-                    LoaderManager loaderManager = getLoaderManager();
+                    LoaderManager loaderManager = getLoaderManager(); //Initiate the loader
                     loaderManager.initLoader(1, null, MainActivity.this);
                     progressBar = findViewById(R.id.progress_bar);
-                    searchButton.setVisibility(View.GONE);
-                    progressBar.setVisibility(View.VISIBLE);
+                    searchButton.setVisibility(View.GONE); //hide the search button
+                    progressBar.setVisibility(View.VISIBLE); //show the progress bar
                 }
             }
         });
 
+        //hide the keyboard when user touch anywhere in the screen
         final RelativeLayout layout = this.findViewById(R.id.parent_layout);
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,6 +197,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     protected void onPause() {
         super.onPause();
+        //destroy loaders if the activity paused
         getLoaderManager().destroyLoader(1);
         getLoaderManager().destroyLoader(2);
     }
@@ -137,19 +205,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public Loader onCreateLoader(int id, Bundle args){
         int loaderId = id;
+        //Starts the book info loader
         if (loaderId==1) {
             BooksInfoLoader booksInfoLoader = new BooksInfoLoader(this, getFinalQueryURL());
             return booksInfoLoader;
         }
 
+        //Start loader to fetch images from the corresponding links
         if (loaderId==2){
             String imageLinks[]=new String[RESULTS.size()];
             BookInfo line;
             int i;
             for (i=0; i<RESULTS.size(); i++){
                 line = RESULTS.get(i);
-                imageLinks[i] = line.getBookCoverImageUrl();
+                imageLinks[i] = line.getBookCoverImageUrl(); //array of image links
             }
+            //start the loader
             CoverImageLoader coverImageLoader = new CoverImageLoader(this, imageLinks);
             return coverImageLoader;
         }
@@ -160,25 +231,30 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoadFinished(Loader loader, Object data) {
         int loaderId = loader.getId();
         if(loaderId==1) {
+            //Store the ArrayList parsed from JSON query to the variable RESULT.
             RESULTS = (ArrayList<BookInfo>) data;
             LoaderManager loaderManager = getLoaderManager();
             loaderManager.initLoader(2,null,MainActivity.this);
         }
 
         if(loaderId==2){
+            //trigger the SHowResultsActivity
             Intent goToSearchResults = new Intent(MainActivity.this, ShowResultsActivity.class);
             startActivity(goToSearchResults);
-            searchButton.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);
-            COVERS = (ArrayList<Bitmap>) data;
+            searchButton.setVisibility(View.VISIBLE); //show the search button
+            progressBar.setVisibility(View.GONE); //hide the progress bar
+            COVERS = (ArrayList<Bitmap>) data; //store images in ArrayList Variable COVER
         }
     }
 
     @Override
     public void onLoaderReset(Loader loader) {
-
+        //Clear all information when loader resets
+        RESULTS.clear();
+        COVERS.clear();
     }
 
+    //Concatenate INITIAL_QUERY with search criteria and userInput to form the finalQuery
     public String getFinalQueryURL() {
         StringBuilder finalQueryUrl = new StringBuilder();
         finalQueryUrl.append(INITIAL_QUERY);

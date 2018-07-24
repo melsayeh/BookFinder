@@ -32,22 +32,22 @@ public class BookAdapter<E extends Object> extends ArrayAdapter<BookInfo> {
         super(context, 0, objects);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+
         // (Recycling) Check if the existing view is being reused, otherwise inflate the view
         View listItemView = convertView;
         if (listItemView==null){
             listItemView = LayoutInflater.from(getContext()).inflate(R.layout.list_item,parent,false);
         }
-        // Get the {@link Word} object located at this position in the list
+
+        // Get the {@link BookInfo} object located at this position in the list
         final BookInfo pointer = getItem(position);
 
-        /*Declare and assign values to ImageView and TextViews BookTitle, Authors,
+        /*Declare and assign values to show in ImageViews, TextViews, Authors,
         Publisher, PublishedDate, and Description
          */
-        Log.d("Pointer Value","---------->"+position);
 
         TextView bookTitle =  listItemView.findViewById(R.id.book_title);
         bookTitle.setText(pointer.getBookTitle());
@@ -55,6 +55,7 @@ public class BookAdapter<E extends Object> extends ArrayAdapter<BookInfo> {
         TextView authorsNames = listItemView.findViewById(R.id.authors);
         authorsNames.setText(fetchAuthorsFromArray(pointer.getAuthors()));
 
+        //show publisher name along with the published date in one line (Ex. McGrowHill - 1990)
         TextView publisherAndDate = listItemView.findViewById(R.id.publisher_date);
         String collector;
         if(pointer.getPublisher().equals(" ")) {
@@ -64,6 +65,7 @@ public class BookAdapter<E extends Object> extends ArrayAdapter<BookInfo> {
         }
         publisherAndDate.setText(collector);
 
+        //Show the price and the currency code in one line (Ex. USD 50.00)
         TextView price = listItemView.findViewById(R.id.price);
         if(pointer.getCurrencyCode().equals(" "))
         {
@@ -79,6 +81,7 @@ public class BookAdapter<E extends Object> extends ArrayAdapter<BookInfo> {
         ImageView bookCoverImage = listItemView.findViewById(R.id.book_cover);
         bookCoverImage.setImageBitmap(pointer.getCoverImage());
 
+        //Open up the preview link of the book in the browser, when the user tap on the item
         LinearLayout itemLayout = listItemView.findViewById(R.id.parent_item);
         itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,22 +94,28 @@ public class BookAdapter<E extends Object> extends ArrayAdapter<BookInfo> {
         return listItemView;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    // Fetch author names from the ArrayList, and group them together in one line
+    // Example: Martin Luther & John Gresham
     public String fetchAuthorsFromArray(ArrayList<String> authors){
-        Log.v("Authors", Arrays.toString(authors.toArray()));
         int i;
-        StringJoiner groupedAuthors = new StringJoiner(" & ");
+        StringBuilder groupedAuthors = new StringBuilder();
         for(i=0 ; i<authors.size() ; i++ ){
+            //if the list has only one name, return it
             if(authors.size()==1) {
                 return authors.get(0);
             }
             else{
-//                if(authors[i]!=null) {
-                    groupedAuthors.add(authors.get(i));
-//                }
+                    //append other authors and add "&" as a delimiter
+                    groupedAuthors.append(authors.get(i)+" & ");
+
 
             }
         }
+        // remove "&" if it comes alone at the end of the line
+        if (groupedAuthors.toString().endsWith(" & ")){
+            groupedAuthors.deleteCharAt(groupedAuthors.length()-4);
+        }
+
         return groupedAuthors.toString();
     }
 }

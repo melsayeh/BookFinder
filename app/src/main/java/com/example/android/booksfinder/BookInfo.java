@@ -4,6 +4,11 @@ import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 
+/* The BookInfo class is used to create an object type that contains information about the
+books that will be parsed from Google Books API
+Information include book title,publisher,cover image URL,description, preview link, retail price
+currency code, and cover image.
+* */
 public class BookInfo extends Object {
     private String bookTitle;
     private ArrayList<String> authors;
