@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.StringJoiner;
 
 public class BookAdapter<E extends Object> extends ArrayAdapter<BookInfo> {
-    private Bitmap coverThumbnail;
 
     public BookAdapter(@NonNull Context context, @NonNull List<BookInfo> objects) {
         super(context, 0, objects);
@@ -50,6 +49,7 @@ public class BookAdapter<E extends Object> extends ArrayAdapter<BookInfo> {
          */
 
         TextView bookTitle =  listItemView.findViewById(R.id.book_title);
+        assert pointer != null;
         bookTitle.setText(pointer.getBookTitle());
 
         TextView authorsNames = listItemView.findViewById(R.id.authors);
@@ -106,7 +106,7 @@ public class BookAdapter<E extends Object> extends ArrayAdapter<BookInfo> {
             }
             else{
                     //append other authors and add "&" as a delimiter
-                    groupedAuthors.append(authors.get(i)+" & ");
+                    groupedAuthors.append(authors.get(i)).append(" & ");
 
 
             }

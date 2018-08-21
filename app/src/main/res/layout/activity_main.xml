@@ -41,13 +41,13 @@
                     android:inputType="text"
                     android:maxLines="1"
                     />
-                <Button
+                <ImageButton
                     android:id="@+id/clear_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="10"
                     android:background="@android:color/transparent"
-                    android:text="X"
+                    android:src="@drawable/clear"
                     android:textSize="20sp"
                     android:visibility="gone"
                     />

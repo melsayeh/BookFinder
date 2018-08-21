@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/icons8_book_shelf"
         android:supportsRtl="true"
         android:theme="@style/Theme.Design.NoActionBar">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.Design">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,6 +26,13 @@
 
                 <category android:name="android.intent.category.ALTERNATIVE" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/settings_title">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.booksfinder.MainActivity"/>
         </activity>
     </application>
 

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.Layout;
@@ -62,10 +63,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         userInput = findViewById(R.id.edit_text);
 
         //Button shows up to clear the EditText all at once
-        final Button clearText = findViewById(R.id.clear_text);
+        final ImageButton clearText = findViewById(R.id.clear_text);
 
-        //Set circled X as text of the button
-        clearText.setText(String.valueOf("\u24E7"));
 
         //Show clearText button when user start typing, if the editText is empty, hide it
         userInput.addTextChangedListener(new TextWatcher() {
@@ -123,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
                     //Hide the keyboard after the user hits "Enter"
                     InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    assert in != null;
                     in.hideSoftInputFromWindow(userInput.getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                     return true;
                 }
@@ -164,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onClick(View v) {
                 InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                assert in != null;
                 in.hideSoftInputFromWindow(userInput.getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
                 //If user left the search field empty show alert dialogue box
@@ -189,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onClick(View v) {
                 InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                assert im != null;
                 im.hideSoftInputFromWindow(layout.getWindowToken(),0);
             }
         });
@@ -207,22 +209,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         int loaderId = id;
         //Starts the book info loader
         if (loaderId==1) {
-            BooksInfoLoader booksInfoLoader = new BooksInfoLoader(this, getFinalQueryURL());
-            return booksInfoLoader;
+            return new BooksInfoLoader(this, getFinalQueryURL());
         }
 
         //Start loader to fetch images from the corresponding links
         if (loaderId==2){
-            String imageLinks[]=new String[RESULTS.size()];
+            ArrayList<String> imageLinks=new ArrayList<>();
             BookInfo line;
             int i;
             for (i=0; i<RESULTS.size(); i++){
                 line = RESULTS.get(i);
-                imageLinks[i] = line.getBookCoverImageUrl(); //array of image links
+                imageLinks.add(line.getBookCoverImageUrl()); //array of image links
+                Log.v("imageLinks:",imageLinks.get(i));
             }
             //start the loader
-            CoverImageLoader coverImageLoader = new CoverImageLoader(this, imageLinks);
-            return coverImageLoader;
+            return new CoverImageLoader(this, imageLinks);
         }
         return null;
     }
@@ -249,9 +250,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoaderReset(Loader loader) {
-        //Clear all information when loader resets
-        RESULTS.clear();
-        COVERS.clear();
+
     }
 
     //Concatenate INITIAL_QUERY with search criteria and userInput to form the finalQuery
