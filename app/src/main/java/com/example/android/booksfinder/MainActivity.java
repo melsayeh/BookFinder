@@ -177,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 }else {
                     LoaderManager loaderManager = getLoaderManager(); //Initiate the loader
                     loaderManager.initLoader(1, null, MainActivity.this);
+                    clearText.setVisibility(View.GONE);
                     progressBar = findViewById(R.id.progress_bar);
                     searchButton.setVisibility(View.GONE); //hide the search button
                     progressBar.setVisibility(View.VISIBLE); //show the progress bar
